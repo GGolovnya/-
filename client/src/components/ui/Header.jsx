@@ -16,15 +16,8 @@ function Header() {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">ПлатежОк</p>
+        <p className="font-bold text-inherit">Скелет</p>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <NavLink to="/" className="text-foreground">
-            Главная
-          </NavLink>
-        </NavbarItem>
-      </NavbarContent>
       <NavbarContent justify="end">
         {userName ? (
           <>
