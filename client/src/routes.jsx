@@ -1,3 +1,5 @@
+// ВСЕ МАРШРУТЫ
+
 import MainPage from './components/pages/MainPage';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
@@ -8,7 +10,7 @@ const routes = [
   { path: '/login', element: <LoginPage /> },
   { path: '/register', element: <RegisterPage /> },
   { path: '/profile', element: <UserProfilePage /> },
-  // Добавьте другие маршруты здесь
+  // сюда добавить маршруты
 ];
 
 export default routes;

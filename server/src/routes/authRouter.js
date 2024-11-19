@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { User } = require('../../db/models');
 
-// Middleware для валидации
 const registerValidation = [
   body('name').isLength({ min: 2 }).withMessage('Имя должно содержать минимум 2 символа'),
   body('email').isEmail().withMessage('Введите корректный email'),
@@ -36,7 +35,6 @@ router.post('/register', registerValidation, async (req, res) => {
     const user = await User.create({ name, email, password });
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
-    console.log(`Как АААААА: ${refreshToken}`);
     await user.update({ refreshToken });
     res.status(201).json({
       message: 'Пользователь успешно зарегистрирован', userId: user.id, token, refreshToken,
