@@ -3,8 +3,8 @@ import React from 'react';
 const WelcomePage = () => {
     return (
         <div>
-            <h1>Welcome to our React application!</h1>
-            <p>This is a simple example of a React component.</p>
+            <h1>Страница называется WelcomePage.jsx</h1>
+            <p>Маршрут у этой страницы / </p>
         </div>
     );
 }
