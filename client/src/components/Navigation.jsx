@@ -1,4 +1,4 @@
-import {  Navbar,   NavbarBrand,   NavbarContent,   NavbarItem,   NavbarMenuToggle,  NavbarMenu,  NavbarMenuItem, Button , Switch, Link} from "@nextui-org/react";
+import {  Navbar,   NavbarBrand,   NavbarContent,DropdownTrigger,   NavbarItem, DropdownItem,DropdownMenu,Dropdown,   NavbarMenuToggle,  NavbarMenu,  NavbarMenuItem, Button , Switch, Link} from "@nextui-org/react";
 import { NavLink } from 'react-router-dom';
 import { useTheme } from "next-themes";
 import { SunIcon } from '../icons/SunIcon';
@@ -25,6 +25,23 @@ function Navigation() {
                     <Link>Компоненты</Link>
                 </NavLink>
             </NavbarItem>
+            <NavbarContent className="hidden sm:flex gap-4" justify="center">
+                <Dropdown>
+                    <NavbarItem>
+                        <DropdownTrigger>
+                        <Link href="#">Выпадающий список</Link>
+                        </DropdownTrigger>
+                    </NavbarItem>
+                    <DropdownMenu>
+                        <DropdownItem key="autoscaling" description="Короткое описание Менюшка 1">
+                        Менюшка 1
+                        </DropdownItem>
+                        <DropdownItem key="autoscaling" description="Короткое описание Менюшка 2">
+                        Менюшка 2
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </NavbarContent>
         </NavbarBrand>
         <NavbarContent justify="end">
             <Switch
@@ -43,6 +60,7 @@ function Navigation() {
                 </Button>
             </NavbarItem>
         </NavbarContent>
+
     </Navbar>
 );
 }
