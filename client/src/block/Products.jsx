@@ -1,6 +1,7 @@
 // Products.jsx
 import React, { useEffect, useState } from 'react';
 import { getAllProducts } from '../service/databaseService';
+import { DelateProductsButton } from "../button/delateProductsButton";
 
 export function Products({ products, setProducts }) {
     const [error, setError] = useState(null);
@@ -25,7 +26,7 @@ export function Products({ products, setProducts }) {
             {error && <p style={{color: 'red'}}>{error}</p>}
             <ul>
                 {products.map((product) => (
-                    <li key={product.id}>{product.title}</li>
+                    <li key={product.id}> {product.title} <DelateProductsButton/> </li>
                 ))}
             </ul>
         </div>
