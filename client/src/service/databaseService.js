@@ -13,6 +13,17 @@ export const getAllProducts = async () => {
   }
 };
 
+// Добавление продукта в БД
+export const postProduct = async (productData) => {
+  try {
+    const response = await axios.post(`${API_URL}/products`, productData);
+    return response.data;
+  } catch (error) {
+    console.error('Error posting product:', error);
+    throw error;
+  }
+};
+
 // Получение всех продавцов из БД
 export const getAllSellers = async () => {
   try {
