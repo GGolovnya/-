@@ -32,4 +32,24 @@ const postProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAllProducts, postProduct };
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Product.destroy({
+      where: { id }
+    });
+    if (deleted) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { getAllProducts, postProduct, deleteProduct };

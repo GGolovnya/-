@@ -24,6 +24,16 @@ export const postProduct = async (productData) => {
   }
 };
 
+export const deleteProduct = async (id) => {
+  try {
+      const response = await axios.delete(`${API_URL}/products/${id}`);
+      return response.data;
+  } catch (error) {
+      console.error('Error deleting product:', error);
+      throw error;
+  }
+};
+
 // Получение всех продавцов из БД
 export const getAllSellers = async () => {
   try {
