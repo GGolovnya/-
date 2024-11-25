@@ -36,7 +36,7 @@ const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await Product.destroy({
-      where: { id }
+      where: { id },
     });
     if (deleted) {
       res.status(204).send();
@@ -52,4 +52,31 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAllProducts, postProduct, deleteProduct };
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title } = req.body;
+
+    const [updated] = await Product.update(
+      { title },
+      { where: { id } },
+    );
+
+    if (updated) {
+      const updatedProduct = await Product.findByPk(id);
+      res.json(updatedProduct);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  getAllProducts, postProduct, deleteProduct, updateProduct,
+};
