@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {NextUIProvider} from "@nextui-org/react"; //подтягивание стиля NextUI
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from 'next-themes'; //оборачивание приложения в стиль NextUI
 import App from './App';
 import './index.css';
 
