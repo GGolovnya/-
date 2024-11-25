@@ -1,34 +1,33 @@
-// components/Products.jsx
-import React, { useState, useEffect } from 'react';
+// Products.jsx
+import React, { useEffect, useState } from 'react';
 import { getAllProducts } from '../service/databaseService';
 
-export function Products() {
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
+export function Products({ products, setProducts }) {
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const data = await getAllProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error('Error:', error);
-        setError(error.message);
-      }
+        try {
+            const data = await getAllProducts();
+            setProducts(data);
+        } catch (err) {
+            setError('Ошибка при загрузке продуктов');
+            console.error('Ошибка загрузки:', err);
+        }
     };
 
-    fetchProducts();
-  }, []);
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
-  if (error) return <div>Error: {error}</div>;
-
-  return (
-    <div>
-      {products.map(product => (
-        <div key={product.id}>
-          {product.title}
+    return (
+        <div>
+            <h2>Список продуктов:</h2>
+            {error && <p style={{color: 'red'}}>{error}</p>}
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>{product.title}</li>
+                ))}
+            </ul>
         </div>
-      ))}
-    </div>
-  );
+    );
 }

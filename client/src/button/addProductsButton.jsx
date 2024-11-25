@@ -1,20 +1,23 @@
-import {  Button } from "@nextui-org/react";
-import { postProduct } from "../service/databaseService"; // Добавить этот импорт
+// AddProductsButton.jsx
+import { Button } from "@nextui-org/react";
+import { postProduct } from "../service/databaseService";
 
-// Компонент кнопки с обработчиком клика
-export function AddProductsButton({ productData }) {
-  const handleAddProduct = async () => {
-    try {
-      const response = await postProduct(productData);
-      console.log('Product added:', response);
-    } catch (error) {
-      console.error('Error adding product:', error);
-    }
-  };
+export function AddProductsButton({ productData, onProductAdded }) {
+    const handleAddProduct = async () => {
+        try {
+            const response = await postProduct(productData);
+            console.log('Продукт добавлен:', response);
+            if (onProductAdded) {
+                onProductAdded(response); // передаем новый продукт
+            }
+        } catch (error) {
+            console.error('Ошибка при добавлении продукта:', error);
+        }
+    };
 
-  return (
-    <Button onClick={handleAddProduct}>
-      ДОБАВИТЬ ПРОДУКТ
-    </Button>
-  );
+    return (
+        <Button onClick={handleAddProduct}>
+            ДОБАВИТЬ ПРОДУКТ
+        </Button>
+    );
 }
