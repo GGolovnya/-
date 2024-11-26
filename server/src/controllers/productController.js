@@ -54,10 +54,15 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+//
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = {
+      title: req.body.title || 'Название не указано',
+      price: req.body.price || 0.00,
+      weight: req.body.weight || 0.00,
+    };
 
     const [updated] = await Product.update(
       updates,

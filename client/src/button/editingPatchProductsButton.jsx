@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 export function EditingPatchProductsButton({ product, onEdit }) {
     return (
       <Button onClick={() => onEdit(product)}>
-        ИЗМЕНИТЬ ОТДЕЛЬНЫЕ ПОЛЯ
+        ВНЕСТИ ИЗМЕНЕНИЕ
       </Button>
     );
   }

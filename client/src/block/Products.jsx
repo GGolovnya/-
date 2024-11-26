@@ -68,8 +68,8 @@ export function Products({ products, setProducts }) {
     const handleFullEdit = async (product) => {
         const updates = editValues[product.id];
         // Для PUT необходимы все поля
-        if (!updates?.title || !updates?.price || !updates?.weight) {
-            setError('Для полного обновления необходимо заполнить ВСЕ поля');
+        if (!updates?.title) {
+            setError('Введите название');
             return;
         }
         try {
