@@ -8,5 +8,6 @@ router.get('/products', productController.getAllProducts); // используе
 router.post('/products', productController.postProduct); // добавление продукта
 router.delete('/products/:id', productController.deleteProduct); // удаление продукта
 router.put('/products/:id', productController.updateProduct); // полное обновление записи
+router.patch('/products/:id', productController.updatePatchProduct); // частичное обновление записи
 
 module.exports = router;

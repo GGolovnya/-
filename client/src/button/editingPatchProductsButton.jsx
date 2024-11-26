@@ -1,10 +1,10 @@
 // EditingProductsButton.jsx
 import { Button } from "@nextui-org/react";
 
-export function EditingProductsButton({ product, onEdit }) {
+export function EditingPatchProductsButton({ product, onEdit }) {
     return (
       <Button onClick={() => onEdit(product)}>
-        ИЗМЕНИТЬ ВСЕ ПОЛЯ
+        ИЗМЕНИТЬ ОТДЕЛЬНЫЕ ПОЛЯ
       </Button>
     );
   }

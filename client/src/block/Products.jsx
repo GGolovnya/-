@@ -1,17 +1,15 @@
 // Products.jsx
 import React, { useEffect, useState } from 'react';
 import { Input } from "@nextui-org/react";
-import { getAllProducts, updateProduct } from '../service/databaseService';
+import { getAllProducts, updateProduct, updatePatchProduct } from '../service/databaseService';
 import { DelateProductsButton } from "../button/delateProductsButton";
 import { EditingProductsButton } from "../button/editingProductsButton";
+import { EditingPatchProductsButton } from "../button/editingPatchProductsButton";
 
 export function Products({ products, setProducts }) {
-    // Состояние для обработки ошибок
     const [error, setError] = useState(null);
-    // Состояние для хранения значений редактирования
     const [editValues, setEditValues] = useState({});
     
-    // Шаг 2: Функция загрузки продуктов
     const fetchProducts = async () => {
         try {
             const data = await getAllProducts();
@@ -22,52 +20,68 @@ export function Products({ products, setProducts }) {
         }
     };
 
-    // Запуск загрузки при монтировании компонента
     useEffect(() => {
         fetchProducts();
     }, []);
 
-    // Шаг 3: Обработчик удаления продукта
     const handleProductDeleted = (deletedProductId) => {
         setProducts(prevProducts => 
             prevProducts.filter(product => product.id !== deletedProductId)
         );
     };
 
-    // Шаг 4: Обработчик изменения значения в input
-    const handleInputChange = (productId, value) => {
-        setEditValues({
-            ...editValues,
-            [productId]: value
-        });
+    const handleInputChange = (productId, field, value) => {
+        setEditValues(prev => ({
+            ...prev,
+            [productId]: {
+                ...prev[productId],
+                [field]: value
+            }
+        }));
     };
 
-    // Шаг 5: Обработчик редактирования продукта
-    const handleEdit = async (product) => {
-        const newValue = editValues[product.id];
-        if (!newValue) return; // Проверка на пустое значение
-
+    // PATCH - частичное обновление (обновляются только указанные поля)
+    const handlePartialEdit = async (product) => {
+        const updates = editValues[product.id];
+        // Проверяем есть ли хотя бы одно поле для обновления
+        if (!updates || Object.keys(updates).length === 0) {
+            setError('Необходимо заполнить хотя бы одно поле');
+            return;
+        }
         try {
-            // Отправка запроса на обновление
-            const updatedProduct = await updateProduct(product.id, { title: newValue });
-            // Обновление состояния списка продуктов
+            // Отправляем только заполненные поля
+            const updatedProduct = await updatePatchProduct(product.id, updates);
             setProducts(prevProducts => 
-                prevProducts.map(p => 
-                    p.id === product.id ? updatedProduct : p
-                )
+                prevProducts.map(p => p.id === product.id ? updatedProduct : p)
             );
-            // Очистка поля ввода
             setEditValues(prev => ({
                 ...prev,
-                [product.id]: ''
+                [product.id]: {}
             }));
         } catch (error) {
-            console.error('Error updating product:', error);
-            setError('Ошибка при обновлении продукта');
+            console.error('Error patching product:', error);
+            setError('Ошибка при частичном обновлении продукта');
         }
     };
 
-    // Шаг 6: Рендер компонента
+    // PUT - полное обновление (все поля должны быть указаны)
+    const handleFullEdit = async (product) => {
+        const updates = editValues[product.id];
+        // Для PUT необходимы все поля
+        if (!updates?.title || !updates?.price || !updates?.weight) {
+            setError('Для полного обновления необходимо заполнить ВСЕ поля');
+            return;
+        }
+        try {
+            // Отправляем полный объект для замены
+            const updatedProduct = await updateProduct(product.id, updates);
+            setProducts(prev => prev.map(p => p.id === product.id ? updatedProduct : p));
+            setEditValues(prev => ({ ...prev, [product.id]: {} }));
+        } catch (error) {
+            setError('Ошибка при полном обновлении');
+        }
+    };
+
     return (
         <div>
             <h2>Список продуктов:</h2>
@@ -75,16 +89,41 @@ export function Products({ products, setProducts }) {
             <ul>
                 {products.map((product) => (
                     <li key={product.id}>
-                        {product.title}
-                        <Input 
-                            value={editValues[product.id] || ''}
-                            onChange={(e) => handleInputChange(product.id, e.target.value)}
-                            placeholder="Измените название продукта"
-                        />
-                        <EditingProductsButton 
-                            onEdit={() => handleEdit(product)}
-                            product={product}
-                        />
+                        <div>
+                            <h3>Текущие данные продукта:</h3>
+                            <p>Название: {product.title}, Цена: {product.price}, Вес: {product.weight}</p>
+                            
+                            <h3>PUT - Полное обновление (заменит ВСЕ поля)</h3>
+                            <Input
+                                value={editValues[product.id]?.title || ''}
+                                onChange={(e) => handleInputChange(product.id, 'title', e.target.value)}
+                                placeholder="Новое название"
+                            />
+                            <EditingProductsButton 
+                                onEdit={() => handleFullEdit(product)}
+                                product={product}
+                            />
+                            
+                            <h3>PATCH - Частичное обновление (изменит только заполненные поля)</h3>
+                            <Input
+                                value={editValues[product.id]?.title || ''}
+                                onChange={(e) => handleInputChange(product.id, 'title', e.target.value)}
+                                placeholder="Название"
+                            />
+                            <Input
+                                value={editValues[product.id]?.price || ''}
+                                onChange={(e) => handleInputChange(product.id, 'price', e.target.value)}
+                                placeholder="Цена"
+                            />
+                            <Input
+                                value={editValues[product.id]?.weight || ''}
+                                onChange={(e) => handleInputChange(product.id, 'weight', e.target.value)}
+                                placeholder="Вес"
+                            />
+                            <EditingPatchProductsButton 
+                                onEdit={() => handlePartialEdit(product)}
+                            />
+                        </div>
                         <DelateProductsButton 
                             productId={product.id}
                             onProductDeleted={handleProductDeleted}

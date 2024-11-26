@@ -1,14 +1,14 @@
 // controllers/productController.js
 const db = require('../../db/models');
-// импортируем весь объект db
-const { Product } = db; // деструктурируем нужную модель
+
+const { Product } = db;
 
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll();
     res.json(products);
   } catch (error) {
-    console.error('Database error:', error); // Добавить логирование
+    console.error('Database error:', error);
     res.status(500).json({
       message: 'Internal server error',
       error: error.message,
@@ -18,9 +18,11 @@ const getAllProducts = async (req, res) => {
 
 const postProduct = async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, price, weight } = req.body;
     const product = await Product.create({
       title,
+      price,
+      weight,
     });
     res.status(201).json(product);
   } catch (error) {
@@ -55,10 +57,10 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title } = req.body;
+    const updates = req.body;
 
     const [updated] = await Product.update(
-      { title },
+      updates,
       { where: { id } },
     );
 
@@ -77,6 +79,31 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const updatePatchProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const [updated] = await Product.update(
+      updates,
+      { where: { id } },
+    );
+
+    if (updated) {
+      const updatedProduct = await Product.findByPk(id);
+      res.json(updatedProduct);
+    } else {
+      res.status(404).json({ message: 'Продукт не найден' });
+    }
+  } catch (error) {
+    console.error('Ошибка базы данных:', error);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
-  getAllProducts, postProduct, deleteProduct, updateProduct,
+  getAllProducts, postProduct, deleteProduct, updateProduct, updatePatchProduct,
 };

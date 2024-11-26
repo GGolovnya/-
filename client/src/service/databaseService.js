@@ -24,6 +24,7 @@ export const postProduct = async (productData) => {
   }
 };
 
+// Удаление продукта в БД
 export const deleteProduct = async (id) => {
   try {
       const response = await axios.delete(`${API_URL}/products/${id}`);
@@ -34,6 +35,7 @@ export const deleteProduct = async (id) => {
   }
 };
 
+// Обновление продукта в БД
 export const updateProduct = async (id, productData) => {
   try {
       const response = await axios.put(`${API_URL}/products/${id}`, productData);
@@ -44,6 +46,16 @@ export const updateProduct = async (id, productData) => {
   }
 };
 
+// Частичное обновление продукта в БД
+export const updatePatchProduct = async (id, productData) => {
+  try {
+      const response = await axios.patch(`${API_URL}/products/${id}`, productData);
+      return response.data;
+  } catch (error) {
+      console.error('Error updating product:', error);
+      throw error;
+  }
+};
 
 //ВСЕ ДЛЯ ПРОДАВЦОВ
 
