@@ -1,21 +1,33 @@
+import { lazy, Suspense } from 'react';
 
-import WelcomePage from '../pages/WelcomePage';
-import ContentPage from '../pages/ContentPage';
-import ComponentsPage from '../pages/ComponentsPage';
-
+const WelcomePage = lazy(() => import('../pages/WelcomePage'));
+const ContentPage = lazy(() => import('../pages/ContentPage'));
+const ComponentsPage = lazy(() => import('../pages/ComponentsPage'));
 
 const routes = [
   {
     path: '/',
-    element: <WelcomePage />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <WelcomePage />
+      </Suspense>
+    ),
   },
   {
     path: '/content',
-    element: <ContentPage />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ContentPage />
+      </Suspense>
+    ),
   },
   {
     path: '/components',
-    element: <ComponentsPage />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ComponentsPage />
+      </Suspense>
+    ),
   },
 ];
 
