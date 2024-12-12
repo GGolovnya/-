@@ -8,7 +8,7 @@ export function AddProductsButton({ productData, onProductAdded }) {
             const response = await postProduct(productData);
             console.log('Продукт добавлен:', response);
             if (onProductAdded) {
-                onProductAdded(response); // передаем новый продукт
+                onProductAdded(response);
             }
         } catch (error) {
             console.error('Ошибка при добавлении продукта:', error);
